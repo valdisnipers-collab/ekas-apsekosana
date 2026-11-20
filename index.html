@@ -1,0 +1,183 @@
+<!doctype html><html lang="lv"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#101827"><title>Ēkas apsekošana · RTU</title><style>
+:root{font-family:system-ui,-apple-system,Segoe UI,sans-serif;color:#172033;background:#f3f5f8}*{box-sizing:border-box}body{margin:0}.app{max-width:720px;margin:auto;min-height:100vh;background:#fff;padding:20px 16px 110px}header{background:#101827;color:white;padding:22px 18px;border-radius:18px}h1{font-size:23px;margin:4px 0 8px}h2{font-size:20px;margin:0 0 8px}.muted{color:#657084;font-size:13px}.header-muted{color:#b9c6d8;font-size:13px}.progress{height:9px;background:#e5eaf0;border-radius:9px;overflow:hidden;margin:15px 0 8px}.bar{height:100%;background:#37b88b;width:0;transition:width .2s}.pillrow{display:flex;gap:7px;overflow-x:auto;padding:12px 0}.pill{border:1px solid #d9e0e9;background:#fff;border-radius:12px;padding:10px 13px;white-space:nowrap;color:#26374e}.pill.active{background:#182a45;color:white}.panel{border:1px solid #e1e6ed;border-radius:16px;padding:16px;margin:14px 0}.item{display:flex;align-items:flex-start;gap:12px;padding:13px 0;border-bottom:1px solid #edf0f4;line-height:1.45}.item:last-child{border:0}.item input{width:22px;height:22px;accent-color:#1a7965;flex-shrink:0}.item span{flex:1}.item input:checked+span{color:#68778b}label.small{font-size:13px;font-weight:650;display:block;margin:14px 0 7px}textarea,input[type=text],input[type=date]{width:100%;border:1px solid #d7dfe9;border-radius:11px;padding:12px;font:inherit;background:#fff;color:#172033}textarea{min-height:105px;resize:vertical}.nav{display:flex;gap:10px}.btn{border:0;border-radius:11px;padding:12px 15px;background:#182a45;color:#fff;font-weight:650;cursor:pointer}.btn.alt{background:#edf1f6;color:#172033}.btn:disabled{opacity:.4}.nav .btn{flex:1}.actions{display:flex;flex-wrap:wrap;gap:8px;margin:18px 0}.actions .btn{font-size:13px}.footer{font-size:12px;color:#69788a;line-height:1.5}.danger{background:#fff7e9;border-left:4px solid #e3a047;padding:12px;border-radius:9px;font-size:13px;line-height:1.5}.step-count{font-size:13px;color:#64758b}details{border:1px solid #e1e6ed;border-radius:12px;padding:13px;margin-top:10px}summary{font-weight:650;cursor:pointer}ul{padding-left:20px;line-height:1.6} .fields{display:grid;grid-template-columns:1fr 1fr;gap:10px}@media(max-width:420px){.fields{grid-template-columns:1fr}}@media(prefers-color-scheme:dark){:root{background:#0b1220;color:#e9eef7}.app{background:#111b2c}.panel,details{border-color:#334155}.muted,.step-count{color:#a6b4c6}.pill,.pill.active{border-color:#3c4d63}.pill{background:#1d2a3e;color:#e9eef7}.pill.active{background:#40618b}.item{border-color:#334155}textarea,input[type=text],input[type=date]{background:#18263a;color:#fff;border-color:#40516a}.btn.alt{background:#293950;color:#fff}.danger{background:#42311b}.progress{background:#334155}}
+[hidden]{display:none!important}.transfer-help{padding-left:22px;line-height:1.6}.transfer-help li{margin-bottom:10px}#transfer p{line-height:1.5}#file-status:not(:empty){border-left:4px solid #37b88b;padding:12px;background:rgba(55,184,139,.1);border-radius:8px}#transfer .actions .btn{font-size:15px;min-height:44px}#transfer{scroll-margin-top:16px}</style></head><body><main class="app"><header><div class="header-muted">RTU · Būvju uzturēšana · 2026/2027</div><h1>Ēkas apsekošanas plāns</h1><div class="header-muted">Mobilā kontrolkarte · 9 posmi · darbs objektā</div></header><section class="panel"><div class="fields"><div><label class="small" for="address">Objekta adrese</label><input id="address" type="text" placeholder="Iela, mājas Nr., pilsēta"></div><div><label class="small" for="date">Apsekošanas datums</label><input id="date" type="date"></div></div><label class="small" for="inspector">Apsekojuma veicējs</label><input id="inspector" type="text" placeholder="Vārds, uzvārds"><div style="display:flex;justify-content:space-between;margin-top:16px"><strong>Apsekošanas progress</strong><strong id="percent">0%</strong></div><div class="progress"><div class="bar" id="bar"></div></div><div class="muted" id="overall">0 no 0 pārbaudēm</div></section><div id="js-warning" class="danger" role="alert" style="margin:12px 0"><b>Lietotne nav palaista.</b> Šis faila priekšskatījums, iespējams, bloķē JavaScript. Atver HTML failu Safari pārlūkprogrammā vai HTML skatītājā, kas atbalsta JavaScript.</div><noscript><div class="danger">JavaScript ir izslēgts. Apsekošanas soļu navigācijai tas ir nepieciešams.</div></noscript><div class="pillrow" id="tabs"></div><section class="panel"><div class="step-count" id="stepnum" style="scroll-margin-top:18px"></div><h2 id="heading"></h2><div class="muted" id="duration"></div><div id="items"></div><label class="small" for="notes">Piezīmes, mērījumi, foto numuri, nepieejamās vietas</label><textarea id="notes" placeholder="Pieraksti konstatēto, piemēram: B-001, ziemeļu fasāde, plaisa 2 mm, foto 014–016"></textarea><div class="nav" style="margin-top:16px"><button class="btn alt" id="prev">← Iepriekšējais</button><button class="btn" id="next">Nākamais →</button></div></section><details><summary>Bojājuma fiksēšanas paraugs</summary><ul><li>ID: B-001</li><li>Atrašanās vieta: fasāde, stāvs, ass vai telpa</li><li>Konstrukcija un bojājuma veids</li><li>Izmēri un mērīšanas metode</li><li>Foto: kopskats, vieta, tuvplāns ar mērogu</li><li>Vieta ēkas plānā, riska pazīmes, turpmākās pārbaudes</li></ul><p class="muted">Vizuāli konstatēts bojājums pats par sevi neapstiprina nestspējas zudumu.</p></details><details><summary>Rīcības prioritātes un kursa darba prasības</summary><p><b>I.</b> Neatliekama rīcība: apdraudējuma novēršana vai zonas norobežošana.</p><p><b>II.</b> Plānoti darbi: saprātīgs, riskā balstīts termiņš.</p><p><b>III.</b> Vēlamie uzlabojumi: ilgtermiņa pasākumi.</p><p class="muted">RTU uzdevumā nepieciešami 2 objekti, 9 atskaites sadaļas, bojājumu vietas plānos, fotofiksācija, orientējošs nolietojums un 5–10 gadu ekspluatācijas prognoze. Nolietojums ir mācību nolūkam veikts orientējošs vērtējums.</p></details><div class="danger" style="margin-top:12px"><b>Drošība.</b> Nekāp uz nedroša jumta, neatver elektroiekārtas, neieej potenciāli nestabilās konstrukcijās. Bīstamas pazīmes dokumentē no drošas vietas, ziņo atbildīgajai personai un nepieciešamības gadījumā piesaisti sertificētu būvspeciālistu.</div><section class="panel" id="transfer" aria-labelledby="transfer-title"><h2 id="transfer-title">Saglabāt un pārnest uz datoru</h2><p>Vienā datu failā saglabājas adrese, datums, apsekotājs, visu 9 posmu atzīmes un piezīmes.</p><ol class="transfer-help"><li>Tālrunī nospied <b>Saglabāt datu failu</b>. Fails parasti nonāk mapē <b>Faili / Lejupielādes</b>.</li><li>Pārnes failu uz datoru, piemēram, ar USB, AirDrop vai paša izvēlētu kopīgošanas veidu. Ja tālrunis atver faila priekšskatījumu, izvēlies <b>Kopīgot</b> un <b>Saglabāt failos</b>.</li><li>Datorā atver šo pašu lietotni un nospied <b>Ielādēt datu failu</b>, lai turpinātu darbu.</li></ol><div class="actions"><button class="btn" id="json">Saglabāt datu failu</button><button class="btn alt" id="share" hidden>Kopīgot datu failu</button><button class="btn alt" id="import">Ielādēt datu failu</button><input type="file" id="file" accept=".json,.txt,application/json,text/plain" hidden><button class="btn alt" id="export">Saglabāt teksta atskaiti</button></div><p id="file-status" role="status" aria-live="polite"></p><p class="muted">Datu fails (.json vai kopīgota .txt kopija) paredzēts darba turpināšanai. Teksta atskaite paredzēta lasīšanai un drukāšanai. Dati netiek publicēti GitHub.</p></section><div class="actions"><button class="btn alt" id="reset">Sākt no jauna</button></div><div class="footer">Atzīmes un piezīmes automātiski glabājas tikai šīs pārlūkprogrammas lokālajā atmiņā. Lai tās nepazustu un varētu pārcelt uz citu ierīci, regulāri saglabā datu failu. Lokāli saglabātu HTML lietotni var atvērt arī bez interneta.</div></main><script>
+document.getElementById('js-warning').remove();
+const sections=[
+{title:'Pirms apsekošanas',time:'20–30 min',items:['Pierakstīt adresi, kadastra apzīmējumu un apsekošanas datumu','Noskaidrot ēkas būvniecības gadu, stāvu skaitu un konstrukciju tipu','Pārbaudīt pieejamos ēkas plānus un iepriekšējos apsekošanas aktus','Saskaņot piekļuvi pagrabam, bēniņiem, jumtam un tehniskajām telpām','Sagatavot telefonu, mērlenti, lukturi, mitruma mērītāju, individuālos aizsardzības līdzekļus']},
+{title:'Teritorija un ēkas kopskats',time:'20–30 min',items:['Nofotografēt adreses zīmi un visu ēku no četrām pusēm','Atzīmēt ēkas novietojumu un orientāciju pēc debespusēm','Pārbaudīt piebrauktuves, ietves, kāpnes un segumu bojājumus','Novērtēt reljefa slīpumu un lietusūdens novadīšanu prom no ēkas','Pārbaudīt apstādījumus, kokus, atkritumu laukumu un apgaismojumu','Fiksēt rotaļu laukumu, soliņu, žogu un citu labiekārtojumu stāvokli']},
+{title:'Pamati, cokols un fasādes',time:'35–50 min',items:['Apiet ēku pa perimetru, sākot no galvenās ieejas','Pārbaudīt cokola plaisas, atslāņojumus, mitruma pēdas un izdrupumus','Fiksēt grunts nosēšanās un pamatu deformāciju redzamās pazīmes','Pārbaudīt fasādes sienu plaisas, to virzienu, garumu un aptuveno platumu','Novērtēt paneļu vai mūra šuvju stāvokli un hermetizāciju','Pārbaudīt fasādes apmetumu, krāsojumu, korozijas un mitruma bojājumus','Pārbaudīt logu ailes, palodzes un ūdens noteces risinājumus','Atzīmēt katru būtisko bojājumu plānā un uzņemt tuvplāna foto ar mērogu']},
+{title:'Balkoni, lodžijas un ieejas',time:'20–30 min',items:['No drošas vietas apskatīt balkonu un lodžiju plātņu redzamās daļas','Pārbaudīt betona atdrupumus, atsegtu stiegrojumu un rūsas pēdas','Pārbaudīt margu deformācijas, koroziju un redzamos stiprinājumus','Novērtēt balkonu ūdens novadīšanu un pieslēgumus fasādei','Pārbaudīt ieejas jumtiņus, lieveņus, pandusus un ārējās kāpnes','Fiksēt atdalījušos elementus vai citas potenciāli bīstamas vietas']},
+{title:'Pagrabs un apakšējās konstrukcijas',time:'30–45 min',items:['Pārbaudīt pagraba pieejamību, apgaismojumu un drošu pārvietošanos','Apskatīt pamatu un pagraba sienu redzamās virsmas','Meklēt plaisas, mitrumu, sāļu izsvīdumus, pelējumu un ūdens iekļūšanu','Pārbaudīt pagraba pārsegumu un balstu redzamās deformācijas','Apskatīt cauruļvadu noplūdes, izolāciju un koroziju','Novērtēt ventilācijas atveres un redzamās hidroizolācijas problēmas','Nofotografēt katru būtisko bojājumu un atzīmēt tā vietu plānā']},
+{title:'Kāpņu telpas un koplietošanas telpas',time:'25–40 min',items:['Apsekot katru stāvu, virzoties no apakšas uz augšu','Pārbaudīt kāpņu laidumus, pakāpienus, laukumus un margas','Meklēt sienu un pārsegumu plaisas, deformācijas un mitruma pēdas','Pārbaudīt logu, durvju un koplietošanas telpu apdares stāvokli','Pārbaudīt evakuācijas ceļu brīvu pieejamību un apgaismojumu','Fiksēt elektroinstalācijas redzamus bojājumus un atvērtus sadales skapjus, tos neaiztiekot','Atzīmēt bojājumus atbilstošā stāva plānā']},
+{title:'Bēniņi un jumts',time:'30–45 min',items:['Pārbaudīt drošu piekļuvi bēniņiem un jumta apskates iespējām','Apskatīt spāres, sijas, kopnes, latojumu un redzamos savienojumus','Meklēt koksnes trupes, mitruma, korozijas un deformāciju pazīmes','Novērtēt bēniņu pārseguma siltumizolācijas stāvokli','Pārbaudīt jumta seguma redzamos bojājumus no drošas vietas','Pārbaudīt skursteņus, parapetus, jumta pieslēgumus un lūkas','Apskatīt notekrenes, notekcaurules un nokrišņu ūdens novadīšanu','Fiksēt ūdens iekļūšanas pēdas bēniņos un augšējā stāvā']},
+{title:'Inženierkomunikācijas un drošība',time:'20–35 min',items:['Pārbaudīt redzamo apkures cauruļvadu un siltumizolācijas stāvokli','Pārbaudīt ūdensapgādes un kanalizācijas redzamās noplūdes','Novērtēt ventilācijas kanālu un restu redzamo stāvokli','Apskatīt elektroapgādes koplietošanas elementus bez to atvēršanas','Pārbaudīt redzamos ugunsdrošības un evakuācijas risinājumus','Fiksēt zibensaizsardzības un gāzes sistēmas redzamās daļas, ja tādas ir','Atzīmēt sistēmas, kuru darbību vizuāli nav iespējams pārbaudīt']},
+{title:'Noslēguma pārbaude objektā',time:'15–25 min',items:['Pārskatīt, vai visas pieejamās telpas un konstrukcijas ir apsekotas','Pārliecināties, ka būtiskajiem bojājumiem ir foto un atrašanās vieta plānā','Pierakstīt iespējamos apdraudējumus un nepieciešamos tūlītējos pasākumus','Atsevišķi uzskaitīt vietas, kurām vajadzīga padziļināta izpēte','Atzīmēt neapsekotās vietas un piekļuves ierobežojumus','Pierakstīt sākotnējos secinājumus un nepieciešamo papildu dokumentāciju']}
+];
+
+const key='rtu-apsekosana-v1';
+const $=id=>document.getElementById(id);
+const emptyState=()=>({done:{},notes:{},address:'',date:'',inspector:'',active:0});
+const isRecord=value=>value!==null&&typeof value==='object'&&!Array.isArray(value);
+function normalizeState(data){
+  if(!isRecord(data))throw new Error('Datu fails nav derīgs.');
+  const clean=emptyState();
+  for(const id of ['address','date','inspector']){
+    if(data[id]!==undefined){
+      if(typeof data[id]!=='string'||data[id].length>10000)throw new Error('Nederīgs lauks: '+id);
+      clean[id]=data[id];
+    }
+  }
+  if(clean.date&&!/^\d{4}-\d{2}-\d{2}$/.test(clean.date))throw new Error('Nederīgs datums.');
+  if(data.done!==undefined&&!isRecord(data.done))throw new Error('Nederīgas atzīmes.');
+  if(data.notes!==undefined&&!isRecord(data.notes))throw new Error('Nederīgas piezīmes.');
+  sections.forEach((section,i)=>{
+    const note=data.notes?.[i];
+    if(note!==undefined){
+      if(typeof note!=='string'||note.length>100000)throw new Error('Nederīgas piezīmes.');
+      clean.notes[i]=note;
+    }
+    section.items.forEach((_,j)=>{
+      const id=i+'-'+j,value=data.done?.[id];
+      if(value!==undefined){
+        if(typeof value!=='boolean')throw new Error('Nederīga pārbaudes atzīme.');
+        clean.done[id]=value;
+      }
+    });
+  });
+  if(data.active!==undefined){
+    if(!Number.isInteger(data.active))throw new Error('Nederīgs posms.');
+    clean.active=Math.max(0,Math.min(sections.length-1,data.active));
+  }
+  return clean;
+}
+let state=emptyState();
+try{const saved=JSON.parse(localStorage.getItem(key));if(saved)state=normalizeState(saved)}catch(e){}
+const status=message=>{$('file-status').textContent=message};
+const save=()=>{
+  try{localStorage.setItem(key,JSON.stringify(state))}
+  catch(e){status('Automātiskā saglabāšana šajā pārlūkā nav pieejama. Saglabā datu failu, pirms aizver lapu.')}
+};
+function render(){
+  state.active=Math.max(0,Math.min(sections.length-1,state.active));
+  const a=state.active,s=sections[a],total=sections.reduce((n,x)=>n+x.items.length,0);
+  let count=0;
+  sections.forEach((section,i)=>section.items.forEach((_,j)=>{if(state.done[i+'-'+j])count++}));
+  $('percent').textContent=Math.round(count/total*100)+'%';
+  $('bar').style.width=(count/total*100)+'%';
+  $('overall').textContent=count+' no '+total+' pārbaudēm';
+  $('tabs').replaceChildren();
+  sections.forEach((x,i)=>{
+    const b=document.createElement('button');
+    b.className='pill'+(i===a?' active':'');
+    b.textContent=(i+1)+' · '+x.items.filter((_,j)=>state.done[i+'-'+j]).length+'/'+x.items.length;
+    b.setAttribute('aria-label','Posms '+(i+1)+': '+x.title);
+    if(i===a)b.setAttribute('aria-current','step');
+    b.onclick=()=>{state.active=i;save();render()};
+    $('tabs').append(b);
+  });
+  $('stepnum').textContent='POSMS '+(a+1)+' NO '+sections.length;
+  $('heading').textContent=s.title;
+  $('duration').textContent='Aptuvenais laiks: '+s.time;
+  $('items').replaceChildren();
+  s.items.forEach((v,j)=>{
+    const label=document.createElement('label');label.className='item';
+    const input=document.createElement('input');input.type='checkbox';input.checked=!!state.done[a+'-'+j];
+    input.onchange=()=>{state.done[a+'-'+j]=input.checked;save();render()};
+    const span=document.createElement('span');span.textContent=v;
+    label.append(input,span);$('items').append(label);
+  });
+  $('notes').value=state.notes[a]||'';
+  $('prev').disabled=a===0;
+  $('next').textContent=a===sections.length-1?'Pabeigt ✓':'Nākamais →';
+}
+function restoreFields(){['address','date','inspector'].forEach(id=>$(id).value=state[id])}
+restoreFields();
+['address','date','inspector'].forEach(id=>$(id).oninput=e=>{state[id]=e.target.value;save()});
+$('notes').oninput=e=>{state.notes[state.active]=e.target.value;save()};
+$('prev').onclick=()=>{state.active=Math.max(0,state.active-1);save();render();$('stepnum').scrollIntoView({behavior:'smooth',block:'start'})};
+$('next').onclick=()=>{
+  if(state.active===sections.length-1){
+    status('Posmi apskatīti. Saglabā datu failu, lai pārnestu apsekojumu uz datoru.');
+    $('transfer').scrollIntoView({behavior:'smooth',block:'start'});
+    $('json').focus({preventScroll:true});
+    return;
+  }
+  state.active++;save();render();$('stepnum').scrollIntoView({behavior:'smooth',block:'start'});
+};
+function download(name,body,type){
+  const link=document.createElement('a'),url=URL.createObjectURL(new Blob([body],{type}));
+  link.href=url;link.download=name;document.body.append(link);link.click();link.remove();
+  setTimeout(()=>URL.revokeObjectURL(url),60000);
+}
+function fileStamp(){
+  const now=new Date(),pad=n=>String(n).padStart(2,'0');
+  return now.getFullYear()+'-'+pad(now.getMonth()+1)+'-'+pad(now.getDate())+'_'+pad(now.getHours())+'-'+pad(now.getMinutes())+'-'+pad(now.getSeconds());
+}
+function backupBody(){
+  ['address','date','inspector'].forEach(id=>state[id]=$(id).value);
+  state.notes[state.active]=$('notes').value;
+  return JSON.stringify({app:'rtu-apsekosana',version:1,exportedAt:new Date().toISOString(),state},null,2);
+}
+function backupFile(extension='json'){
+  return new File([backupBody()],'apsekojums_'+fileStamp()+'.'+extension,{type:extension==='json'?'application/json':'text/plain'});
+}
+$('json').onclick=()=>{
+  download('apsekojums_'+fileStamp()+'.json',backupBody(),'application/json;charset=utf-8');
+  status('Datu faila lejupielāde sākta. Meklē to mapē Faili / Lejupielādes. Datorā izvēlies “Ielādēt datu failu”.');
+};
+let shareExtension=null;
+try{
+  if(navigator.share&&navigator.canShare){
+    for(const ext of ['json','txt']){
+      const probe=new File(['{}'],'apsekojums.'+ext,{type:ext==='json'?'application/json':'text/plain'});
+      if(navigator.canShare({files:[probe]})){shareExtension=ext;break}
+    }
+  }
+}catch(e){}
+$('share').hidden=!shareExtension;
+$('share').onclick=async()=>{
+  if(!shareExtension){$('json').click();return}
+  const file=backupFile(shareExtension);
+  try{
+    await navigator.share({files:[file]});
+    status('Fails nodots tālruņa izvēlētajai darbībai. Ja izvēlējies “Saglabāt failos”, pārbaudi izvēlēto mapi. Datorā šo failu var ielādēt lietotnē.');
+  }catch(error){
+    if(error.name==='AbortError'){status('Kopīgošana atcelta. Ievadītie dati paliek lietotnē.');return}
+    status('Kopīgošana nav pieejama. Izvēlies “Saglabāt datu failu”, lai to lejupielādētu.');
+  }
+};
+$('export').onclick=()=>{
+  const lines=['ĒKAS APSEKOŠANAS KONTROLLAPA','Adrese: '+state.address,'Datums: '+state.date,'Apsekoja: '+state.inspector,''];
+  sections.forEach((s,i)=>{
+    lines.push((i+1)+'. '+s.title);
+    s.items.forEach((v,j)=>lines.push((state.done[i+'-'+j]?'[X] ':'[ ] ')+v));
+    lines.push('Piezīmes: '+(state.notes[i]||'—'),'');
+  });
+  download('apsekosanas_atskaite_'+fileStamp()+'.txt',lines.join('\n'),'text/plain;charset=utf-8');
+  status('Teksta atskaites lejupielāde sākta. Lai turpinātu darbu citā ierīcē, saglabā arī datu failu.');
+};
+$('import').onclick=()=>$('file').click();
+$('file').onchange=async event=>{
+  const file=event.target.files[0];if(!file)return;
+  try{
+    if(file.size>2*1024*1024)throw new Error('Fails ir pārāk liels (maksimums 2 MB).');
+    const data=JSON.parse((await file.text()).replace(/^\uFEFF/,''));
+    if(!isRecord(data)||data.version!==1||(data.app!==undefined&&data.app!=='rtu-apsekosana')||!isRecord(data.state))throw new Error('Izvēlies šajā lietotnē saglabātu datu failu (.json vai kopīgotu .txt).');
+    const imported=normalizeState(data.state);
+    if(!confirm('Ielādēt datu failu? Tas aizstās šajā ierīcē redzamo adresi, atzīmes un piezīmes. Ja nepieciešams, vispirms saglabā pašreizējo datu failu.')){
+      status('Ielāde atcelta. Pašreizējie dati nav mainīti.');return;
+    }
+    state=imported;save();restoreFields();render();
+    status('Datu fails ielādēts. Atjaunota adrese, datums, apsekotājs, visas atzīmes un piezīmes.');
+  }catch(error){
+    status('Failu neizdevās ielādēt. '+(error instanceof SyntaxError?'Fails nesatur derīgus apsekojuma datus.':error.message)+' Pašreizējie dati nav mainīti.');
+  }finally{event.target.value=''}
+};
+$('reset').onclick=()=>{
+  if(confirm('Vai tiešām dzēst visas atzīmes un piezīmes šajā ierīcē? Iepriekš lejupielādētie faili netiks dzēsti.')){
+    state=emptyState();save();restoreFields();render();status('Sākts jauns apsekojums. Iepriekš saglabātie datu faili paliek tavā ierīcē.');
+  }
+};
+render();
+
+</script></body></html>
